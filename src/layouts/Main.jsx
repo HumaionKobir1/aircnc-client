@@ -1,8 +1,11 @@
+import { Outlet } from "react-router-dom";
+import Navber from "../components/Share/Navber/Navber";
 
 const Main = () => {
     return (
         <div>
-            <h1 className="text">Humaion Kobir</h1>
+            <Navber></Navber>
+            <Outlet></Outlet>
         </div>
     );
 };
