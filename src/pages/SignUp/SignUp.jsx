@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { FcGoogle } from 'react-icons/fc'
-import { useContext, useRef } from 'react'
+import { useContext } from 'react'
 import { AuthContext } from '../../providers/AuthProvider'
 import {TbFidgetSpinner} from 'react-icons/tb'
 
@@ -11,8 +11,59 @@ const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
+  const img_hosting_token = import.meta.env. VITE_IMGBB_KEY;
 
+  // Handle user registration
+  const handleSubmit = event => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
 
+    // Image Upload
+    const image = form.image.files[0]
+    const formData = new FormData();
+    formData.append('image', image);
+    const url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
+
+    fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(res => res.json())
+    .then(imageData => {
+     const imageUrl = (imageData.data.display_url)
+      createUser(email, password)
+      .then(result => {
+        console.log(result);
+        updateUserProfile(name, imageUrl)
+        .then(() => {
+          toast.success('SignUp successful')
+          navigate(from, {replace: true});
+        })
+        .catch(error => {
+            setLoading(false);
+            console.log(error.message)
+            toast.error(error.message);
+            
+        })
+      })
+      .catch(error => {
+          setLoading(false);
+          console.log(error.message)
+          toast.error(error.message);
+          
+      })
+
+    })
+    .catch(err => {
+      setLoading(false);
+      console.log(err.message)
+      toast.error(err.message);
+    })
+    
+  }
 
 
   // Handle Google signIn
@@ -38,6 +89,7 @@ const SignUp = () => {
           <p className='text-sm text-gray-400'>Welcome to AirCNC</p>
         </div>
         <form
+        onSubmit={handleSubmit}
           noValidate=''
           action=''
           className='space-y-6 ng-untouched ng-pristine ng-valid'
