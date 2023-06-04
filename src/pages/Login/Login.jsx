@@ -4,6 +4,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { useContext, useRef } from 'react'
 import { AuthContext } from '../../providers/AuthProvider'
 import {TbFidgetSpinner} from 'react-icons/tb'
+import { saveUser } from '../../api/auth'
 
 const Login = () => {
     const {signIn, setLoading, loading, resetPassword, signInWithGoogle} = useContext(AuthContext);
@@ -36,6 +37,8 @@ const Login = () => {
     const handleGoogleSignIn = () => {
         signInWithGoogle()
         .then(result => {
+          // save user to db
+          saveUser(result.user)
             console.log(result);
             navigate(from, {replace: true});
         })
