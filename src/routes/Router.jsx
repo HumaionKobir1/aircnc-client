@@ -32,7 +32,13 @@ const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
-        element: <DashboardLayout></DashboardLayout>
+        element: <DashboardLayout></DashboardLayout>,
+        children: [
+            {
+                path: '/dashboard/add-room',
+                element: <p>this is add addRoom page</p>
+            }
+        ]
     }
 ])
 export default router;
