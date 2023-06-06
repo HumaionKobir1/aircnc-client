@@ -4,21 +4,34 @@ import { AiOutlineMenu } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../../providers/AuthProvider'
 import Avatar from './Avatar'
+import HostModal from '../../Modal/HostRequestModal'
+import { becomeHost } from '../../../api/auth'
+import { toast } from 'react-hot-toast'
 
 const MenuDropdown = () => {
   const { user, logOut } = useContext(AuthContext)
   const [isOpen, setIsOpen] = useState(false)
+  const [modal , setModal] = useState(false)
 
-  // optional for toggle
+  const modalHandler = email => {
+    becomeHost(email)
+    .then(data => {
+      console.log(data)
+      toast.success('You are host now, Post Rooms')
+      closeModal()
+    })
+  }
 
-  // const toggleOpen = useCallback(() => {
-  //   setIsOpen(value => !value)
-  // }, []);
+  const closeModal = () => {
+    setModal(false)
+  }
+
+
 
   return (
     <div className='relative'>
       <div className='flex flex-row items-center gap-3'>
-        <div className='hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer'>
+        <div onClick={()=>setModal(true)} className='hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer'>
           AirCNC your home
         </div>
         <div
@@ -77,6 +90,8 @@ const MenuDropdown = () => {
           </div>
         </div>
       )}
+
+      <HostModal closeModal={closeModal} email={user?.email} modalHandler={modalHandler} isOpen={modal}></HostModal>
     </div>
   )
 }
