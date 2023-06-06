@@ -41,12 +41,23 @@ const MenuDropdown = () => {
               Home
             </Link>
             {user ? (
+              <>
+              <Link
+                  to='/dashboard'
+                  className='px-4 py-3 hover:bg-neutral-100 transition font-semibold'
+                >
+                  Dashboard
+              </Link>
+
               <div
                 onClick={logOut}
                 className='px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer'
               >
                 Logout
               </div>
+              
+              </>
+              
             ) : (
               <>
                 <Link
@@ -69,5 +80,8 @@ const MenuDropdown = () => {
     </div>
   )
 }
+
+// Sidemen, Indonesia
+// Seaside Paradise 
 
 export default MenuDropdown;
